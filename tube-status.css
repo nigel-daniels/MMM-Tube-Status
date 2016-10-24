@@ -1,3 +1,18 @@
+.tubeStatus {
+    font-size: 20px;
+    text-align: center;
+}
+
+.lineName {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.lineStatus {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .bakerloo {
     background-color: #B36305;
 }

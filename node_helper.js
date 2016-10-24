@@ -14,7 +14,6 @@ module.exports = NodeHelper.create({
         console.log('MMM-Tube-Status helper, started...');
 
         // Set up the local values
-        this.location = '';
         this.result = null;
         },
 
@@ -31,15 +30,14 @@ module.exports = NodeHelper.create({
             // Check to see if we are error free and got an OK response
             if (!error && response.statusCode == 200) {
                 // Let's get the weather data for right now
-                that.location = result[0].ReportingArea;
                 that.result = result;
             } else {
                 // In all other cases it's some other error
-                that.location = 'Error getting data';
+                that.result = null;
                 }
 
             // We have the response figured out so lets fire off the notifiction
-            that.sendSocketNotification('GOT-TUBE-STATUS', {'url': that.url, 'location': that.location, 'result': that.result});
+            that.sendSocketNotification('GOT-TUBE-STATUS', {'url': that.url, 'result': that.result});
             });
         },
 

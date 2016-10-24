@@ -29,7 +29,7 @@ Module.register('MMM-Tube-Status', {
         this.result = null;
 
         // Trigger the first request
-        this.getAirQualityData(this);
+        this.getTubeStatusData(this);
         },
 
 
@@ -47,83 +47,57 @@ Module.register('MMM-Tube-Status', {
 
     getDom: function() {
         // Set up the local wrapper
-        var wrapper = null;
+        var wrapper = document.createElement('div');
 
         // If we have some data to display then build the results table
         if (this.loaded) {
-            wrapper = document.createElement('div');
-		    wrapper.className = 'airnow small';
-
-            airLocation = document.createElement('div');
-            airLocation.className = 'airLocation';
-            airLocation.innerHTML = this.location;
-
-            airDetails = document.createElement('table');
-
             if (this.result !== null) {
-                // Build the air quality details
+                tubeResults = document.createElement('table');
+                tubeResults.className = 'tubeStatus bright';
+
                 for (var i=0; i < this.result.length; i++) {
+                    lineRow = document.createElement('tr');
 
-                    var colourClass = '';
-                    var catName = '';
+                    lineName = document.createElement('td');
+                    lineName.className = 'lineName ' + this.result[i].id;
+                    lineName.innerHTML = this.result[i].name;
 
-                    switch (this.result[i].Category.Number) {
-                        case 1:
-                            colourClass = 'good';
-                            catName = 'Good';
-                            break;
-                        case 2:
-                            colourClass = 'moderate';
-                            catName = 'Moderate';
-                            break;
-                        case 3:
-                            colourClass = 'sensitive';
-                            catName = 'Sensitivity Risk';
-                            break;
-                        case 4:
-                            colourClass = 'unhealthy';
-                            catName = 'Unhealthy';
-                            break;
-                        case 5:
-                            colourClass = 'v_unhealthy';
-                            catName = 'Very Unhealthy';
-                            break;
-                        case 6:
-                            colourClass = 'hazardous';
-                            catName = 'Hazardous';
-                            break;
+                    lineStatus = document.createElement('td');
+                    lineStatus.className = 'lineStatus';
+
+                    for (var j=0; j < this.result[i].lineStatuses.length; j++) {
+                        if (this.result[i].lineStatuses[j].validityPeriods.length < 2) {
+                            lineStatus.innerHTML = this.result[i].lineStatuses[j].statusSeverityDescription;
+                        } else {
+                            for (var k=0; k < this.result[i].lineStatuses[j].validityPeriods.length; k++) {
+                                if (this.result[i].lineStatuses[j].validityPeriods[k].isNow) {
+                                    lineStatus.innerHTML = this.result[i].lineStatuses[j].statusSeverityDescription;
+                                    }
+                                }
+                            }
                         }
 
-                    airRow = document.createElement('tr');
-                    airRow.className = colourClass;
+                    lineRow.appendChild(lineName);
+                    lineRow.appendChild(lineStatus);
 
-                    airParameter = document.createElement('td');
-                    airParameter.className = 'airParameter normal';
-                    airParameter.innerHTML = this.result[i].ParameterName;
+                    if (this.config.show_all) {
+                        tubeResults.appendChild(lineRow);
+                    } else {
 
-                    airAQI = document.createElement('td');
-                    airAQI.className = 'airAQI normal';
-                    airAQI.innerHTML = this.result[i].AQI;
+                        if (lineStatus.innerHTML != 'Good Service') {
+                            tubeResults.appendChild(lineRow);
+                            }
+                        }
 
-                    airName = document.createElement('td');
-                    airName.className ='airName ' + colourClass;
-                    airName.innerHTML = catName;
-
-                    airRow.appendChild(airParameter);
-                    airRow.appendChild(airAQI);
-                    airRow.appendChild(airName);
-
-                    airDetails.appendChild(airRow);
+                    wrapper.appendChild(tubeResults);
                     }
+            } else {
+                // Otherwise lets just use a simple div
+                wrapper.innerHTML = 'Error getting tube status.';
                 }
-
-            // Add elements to the now div
-            wrapper.appendChild(airLocation);
-            wrapper.appendChild(airDetails);
         } else {
             // Otherwise lets just use a simple div
-            wrapper = document.createElement('div');
-            wrapper.innerHTML = 'Loading tube status data...';
+            wrapper.innerHTML = 'Loading tube status...';
             }
 
         return wrapper;
@@ -135,7 +109,6 @@ Module.register('MMM-Tube-Status', {
         if (notification === 'GOT-TUBE-STATUS' && payload.url === this.url) {
                 // we got some data so set the flag, stash the data to display then request the dom update
                 this.loaded = true;
-                this.location = payload.location;
                 this.result = payload.result;
                 this.updateDom(1000);
             }
