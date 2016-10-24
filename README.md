@@ -13,7 +13,7 @@ The entry in `config.js` can include the following options:
 |`app_id`|**Required** This is the App ID assigned to you on the TfL Open Data Portal.  Details on how to request an App ID can be found [here](https://api-portal.tfl.gov.uk/docs)<br><br>**Type:** `string`<br>|
 |`api_key`|**Required** This is the API key assigned to you on the TfL Open Data Portal.  Details on how to request an API key can be found [here](https://api-portal.tfl.gov.uk/docs)<br><br>**Type:** `string`<br>|
 |`show_all`|This determins if the module displays all of the tube lines or just those affected by some sort of outage.<br><br>**Type:** `boolean`<br>**Default value:** true|
-|`interval`|How often the weather is updated.<br><br>**Type:** `integer`<br>**Default value:** `900000 // 15 minutes`|
+|`interval`|How often the weather is updated.<br><br>**Type:** `integer`<br>**Default value:** `600000 // 10 minutes`|
 
 Here is an example of an entry in `config.js`
 ```
