@@ -13,6 +13,18 @@
     padding-right: 10px;
 }
 
+.goodService {
+    color: #007D32;
+}
+
+.partClosure {
+    color: #FFD329;
+}
+
+.serviceClosed {
+    color: #DC241F;
+}
+
 .bakerloo {
     background-color: #B36305;
 }

@@ -63,19 +63,36 @@ Module.register('MMM-Tube-Status', {
                     lineName.innerHTML = this.result[i].name;
 
                     lineStatus = document.createElement('td');
-                    lineStatus.className = 'lineStatus';
 
                     for (var j=0; j < this.result[i].lineStatuses.length; j++) {
                         if (this.result[i].lineStatuses[j].validityPeriods.length < 2) {
+                            severity = this.result[i].lineStatuses[j].statusSeverityDescription;
                             lineStatus.innerHTML = this.result[i].lineStatuses[j].statusSeverityDescription;
                         } else {
                             for (var k=0; k < this.result[i].lineStatuses[j].validityPeriods.length; k++) {
                                 if (this.result[i].lineStatuses[j].validityPeriods[k].isNow) {
-                                    lineStatus.innerHTML = this.result[i].lineStatuses[j].statusSeverityDescription;
+                                    severity = this.result[i].lineStatuses[j].statusSeverityDescription;
                                     }
                                 }
                             }
                         }
+
+                    switch (severity) {
+                        case 'Good Service':
+                            lineStatus.className = 'lineStatus goodService';
+                            break;
+                        case 'Part Closure':
+                            lineStatus.className = 'lineStatus partClosure';
+                            break;
+                        case 'Service Closed':
+                            lineStatus.className = 'lineStatus serviceClosed';
+                            break;
+                        default:
+                            lineStatus.className = 'lineStatus';
+                            break;
+                        }
+
+                    lineStatus.innerHTML = severity;
 
                     lineRow.appendChild(lineName);
                     lineRow.appendChild(lineStatus);
