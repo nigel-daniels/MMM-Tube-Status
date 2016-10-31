@@ -13,16 +13,21 @@
     padding-right: 10px;
 }
 
-.goodService {
+.goodStatus {
     color: #007D32;
 }
 
-.partClosure {
+.poorStatus {
     color: #FFD329;
 }
 
-.serviceClosed {
+.badStatus {
     color: #DC241F;
+}
+
+.allLines {
+    color: #000000;
+    background-color: #FFFFFF;
 }
 
 .bakerloo {

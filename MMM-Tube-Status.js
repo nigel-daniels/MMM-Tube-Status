@@ -48,6 +48,7 @@ Module.register('MMM-Tube-Status', {
     getDom: function() {
         // Set up the local wrapper
         var wrapper = document.createElement('div');
+        var goodService = 0;
 
         // If we have some data to display then build the results table
         if (this.loaded) {
@@ -79,13 +80,28 @@ Module.register('MMM-Tube-Status', {
 
                     switch (severity) {
                         case 'Good Service':
-                            lineStatus.className = 'lineStatus goodService';
+                        case 'No Issues':
+                            lineStatus.className = 'lineStatus goodStatus';
                             break;
                         case 'Part Closure':
-                            lineStatus.className = 'lineStatus partClosure';
+                        case 'Minor Delays':
+                        case 'Part Suspended':
+                        case 'Reduced Service':
+                        case 'Bus Service':
+                        case 'Part Closed':
+                        case 'No Step Free Access':
+                        case 'Diverted':
+                        case 'Issues Reported':
+                            lineStatus.className = 'lineStatus poorStatus';
                             break;
+                        case 'Closed':
                         case 'Service Closed':
-                            lineStatus.className = 'lineStatus serviceClosed';
+                        case 'Planned Closure':
+                        case 'Suspended':
+                        case 'Severe Delays':
+                        case 'Exit Only':
+                        case 'Not Running':
+                            lineStatus.className = 'lineStatus badStatus';
                             break;
                         default:
                             lineStatus.className = 'lineStatus';
@@ -100,14 +116,33 @@ Module.register('MMM-Tube-Status', {
                     if (this.config.show_all) {
                         tubeResults.appendChild(lineRow);
                     } else {
-
                         if (lineStatus.innerHTML != 'Good Service') {
                             tubeResults.appendChild(lineRow);
+                        } else {
+                            goodService++;
+
+                            if (goodService === this.result.length) {
+                                allRow = document.createElement('tr');
+
+                                allLines = document.createElement('td');
+                                allLines.className = 'lineName allLines';
+                                allLines.innerHTML = 'All Lines';
+
+                                allStatus = document.createElement('td');
+                                allStatus.className = 'lineStatus goodService';
+                                allStatus.innerHTML = 'Good Service';
+
+                                allRow.appendChild(allLines);
+                                allRow.appendChild(allStatus);
+
+                                tubeResults.appendChild(allRow);
+                                }
                             }
                         }
 
-                    wrapper.appendChild(tubeResults);
+
                     }
+                wrapper.appendChild(tubeResults);
             } else {
                 // Otherwise lets just use a simple div
                 wrapper.innerHTML = 'Error getting tube status.';
