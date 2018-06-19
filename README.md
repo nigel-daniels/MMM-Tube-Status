@@ -1,4 +1,6 @@
 # MMM-Tube-Status
+![Tube status](tube.png "Tube status.")
+
 This a module for the [MagicMirror](https://github.com/MichMich/MagicMirror/tree/develop).   This module shows the status of the London Underground.
 
 ## Installation
