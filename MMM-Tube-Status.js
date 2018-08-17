@@ -18,10 +18,6 @@ Module.register('MMM-Tube-Status', {
     start:  function() {
         Log.log('Starting module: ' + this.name);
 
-        if (this.data.classes === 'MMM-Tube-Status') {
-            this.data.classes = 'bright medium';
-            }
-
         // Set up the local values, here we construct the request url to use
         this.loaded = false;
         this.url = 'https://api.tfl.gov.uk/line/mode/tube/status';
@@ -48,6 +44,8 @@ Module.register('MMM-Tube-Status', {
     getDom: function() {
         // Set up the local wrapper
         var wrapper = document.createElement('div');
+		wrapper.className = 'bright medium';
+
         var goodService = 0;
 
         // If we have some data to display then build the results table
